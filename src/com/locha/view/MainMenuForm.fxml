@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="329.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.locha.controller.MainMenuFormController">
+   <children>
+      <JFXTextField layoutX="247.0" layoutY="32.0" prefHeight="38.0" prefWidth="106.0" text="Main Menu">
+         <font>
+            <Font name="Ubuntu" size="20.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="126.0" onAction="#btnManageItems" style="-fx-background-color: #5CD85A; -fx-background-radius: 30; -fx-border-radius: 30;" text="Manage Items" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="192.0" onAction="#btnManageOrders" style="-fx-background-color: #5CD85A; -fx-background-radius: 30; -fx-border-radius: 30;" text="Manage Orders" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="221.0" layoutY="260.0" onAction="#btnManageCustomers" style="-fx-background-color: #5CD85A; -fx-background-radius: 30; -fx-border-radius: 30;" text="Manage Customers" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+   </children>
+</AnchorPane>

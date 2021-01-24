@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="570.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.locha.controller.ManageOrdersFormController">
+   <children>
+      <JFXTextField focusTraversable="false" layoutX="334.0" layoutY="29.0" prefHeight="38.0" prefWidth="146.0" text="Manage Orders">
+         <font>
+            <Font name="Ubuntu" size="20.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtName" labelFloat="true" layoutX="51.0" layoutY="167.0" promptText="Name">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtAddress" labelFloat="true" layoutX="51.0" layoutY="235.0" promptText="Address">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtCID" editable="false" labelFloat="true" layoutX="51.0" layoutY="96.0" promptText="CID">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <TableView fx:id="tblItems" layoutX="315.0" layoutY="95.0" onMouseClicked="#tblItemsOnMouseClicked" prefHeight="173.0" prefWidth="488.0">
+         <columns>
+            <TableColumn fx:id="clmItemCode" prefWidth="86.0" text="Code" />
+            <TableColumn fx:id="clmDescription" prefWidth="232.0" text="Description" />
+            <TableColumn fx:id="clmItemQTY" prefWidth="77.0" text="QTY" />
+            <TableColumn fx:id="clmPrice" prefWidth="114.0" text="Price" />
+         </columns>
+      </TableView>
+      <Line endX="698.0" layoutX="108.0" layoutY="347.0" startX="-100.0" />
+      <Label layoutX="150.0" layoutY="389.0" text="Cart">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tblOrders" layoutX="24.0" layoutY="437.0" onMouseClicked="#tblOrdersOnMouseClicked" prefHeight="119.0" prefWidth="282.0">
+         <columns>
+            <TableColumn fx:id="clmCode" prefWidth="86.0" text="Code" />
+            <TableColumn fx:id="clmQTY" prefWidth="97.0" text="QTY" />
+            <TableColumn fx:id="clmTotalPrice" prefWidth="97.0" text="Price" />
+         </columns>
+      </TableView>
+      <JFXTextField fx:id="txtQTY" labelFloat="true" layoutX="315.0" layoutY="300.0" prefHeight="28.0" prefWidth="97.0" promptText="QTY">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton fx:id="btnAddtoCart" buttonType="RAISED" layoutX="480.0" layoutY="301.0" onAction="#btnAddtoCartOnAction" style="-fx-background-color: black; -fx-background-radius: 20; -fx-border-radius: 20;" text="Add to Cart" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <TextField fx:id="txtTotalPrice" editable="false" layoutX="360.0" layoutY="437.0" prefHeight="26.0" prefWidth="130.0" style="-fx-text-fill: red;" />
+      <Label layoutX="388.0" layoutY="414.0" text="Total Price:" />
+      <JFXButton fx:id="btnPlaceOrder" buttonType="RAISED" layoutX="373.0" layoutY="522.0" onAction="#btnPlaceOrderOnAction" style="-fx-background-color: black; -fx-background-radius: 20; -fx-border-radius: 20;" text="Place Order" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="718.0" layoutY="509.0" onAction="#btnBackOnAction" style="-fx-background-color: black; -fx-background-radius: 20; -fx-border-radius: 20;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="btnRemove" buttonType="RAISED" layoutX="374.0" layoutY="484.0" onAction="#btnRemoveItemOnAction" style="-fx-background-color: black; -fx-background-radius: 20; -fx-border-radius: 20;" text="RemoveItem" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+   </children>
+</AnchorPane>

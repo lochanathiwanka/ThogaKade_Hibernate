@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="518.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.locha.controller.ManageItemsFormController">
+   <children>
+      <JFXTextField focusTraversable="false" layoutX="343.0" layoutY="30.0" prefHeight="38.0" prefWidth="132.0" text="Manage Items">
+         <font>
+            <Font name="Ubuntu" size="20.0" />
+         </font>
+      </JFXTextField>
+      <TableView fx:id="tblItems" layoutX="33.0" layoutY="124.0" onMouseClicked="#tblItemsOnMouseClicked" prefHeight="200.0" prefWidth="516.0">
+        <columns>
+          <TableColumn fx:id="clmCode" prefWidth="75.0" text="Code" />
+          <TableColumn fx:id="clmDescription" prefWidth="281.0" text="Description" />
+            <TableColumn fx:id="clmQTY" prefWidth="74.0" text="QTY" />
+            <TableColumn fx:id="clmPrice" prefWidth="85.0" text="Price" />
+        </columns>
+      </TableView>
+      <JFXTextField fx:id="txtCode" editable="false" labelFloat="true" layoutX="33.0" layoutY="377.0" prefHeight="26.0" prefWidth="116.0" promptText="Code" unFocusColor="#e40b0b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtDescription" labelFloat="true" layoutX="203.0" layoutY="375.0" prefHeight="32.0" prefWidth="229.0" promptText="Description" unFocusColor="#e40b0b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtQTY" labelFloat="true" layoutX="33.0" layoutY="440.0" prefHeight="26.0" prefWidth="116.0" promptText="QTY" unFocusColor="#e40b0b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txtPrice" labelFloat="true" layoutX="203.0" layoutY="440.0" prefHeight="26.0" prefWidth="116.0" promptText="Price" unFocusColor="#e40b0b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton buttonType="RAISED" layoutX="651.0" layoutY="157.0" onAction="#btnAddOnAction" prefHeight="26.0" prefWidth="71.0" style="-fx-background-color: #A16AE8; -fx-background-radius: 30; -fx-border-radius: 30;" text="Add" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="btnUpdate" buttonType="RAISED" layoutX="651.0" layoutY="211.0" onAction="#btnUpdateOnAction" style="-fx-background-color: #A16AE8; -fx-background-radius: 30; -fx-border-radius: 30;" text="Update" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="btnDelete" buttonType="RAISED" layoutX="651.0" layoutY="268.0" onAction="#btnDeleteOnAction" prefHeight="26.0" prefWidth="71.0" style="-fx-background-color: #A16AE8; -fx-background-radius: 30; -fx-border-radius: 30;" text="Delete" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="704.0" layoutY="455.0" onAction="#btnBackOnAction" prefHeight="26.0" prefWidth="54.0" style="-fx-background-color: black; -fx-background-radius: 30; -fx-border-radius: 30;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+   </children>
+</AnchorPane>
