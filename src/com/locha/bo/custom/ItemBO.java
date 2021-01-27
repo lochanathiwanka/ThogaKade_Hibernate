@@ -7,13 +7,13 @@ import com.locha.entity.Item;
 import java.util.List;
 
 public interface ItemBO extends SuperBO {
-    boolean addItem(ItemDTO item) throws Exception;
+    void addItem(ItemDTO item) throws Exception;
 
     String getLastId() throws Exception;
 
     List<ItemDTO> getAll() throws Exception;
 
-    boolean updateItem(ItemDTO item) throws Exception;
+    void updateItem(ItemDTO item) throws Exception;
 
-    boolean deleteItem(ItemDTO item) throws Exception;
+    void deleteItem(String id) throws Exception;
 }

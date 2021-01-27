@@ -2,29 +2,23 @@ package com.locha.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Entity
-public class Item {
+public class Item implements SuperEntity {
     @Id
     private String code;
     private String description;
     private int qty;
     private double price;
 
-    @OneToMany(mappedBy = "item")
-    private List<OrderDetail> orderDetailList;
-
     public Item() {
     }
 
-    public Item(String code, String description, int qty, double price, List<OrderDetail> orderDetailList) {
+    public Item(String code, String description, int qty, double price) {
         this.code = code;
         this.description = description;
         this.qty = qty;
         this.price = price;
-        this.orderDetailList = orderDetailList;
     }
 
     public String getCode() {
@@ -59,11 +53,4 @@ public class Item {
         this.price = price;
     }
 
-    public List<OrderDetail> getOrderDetailList() {
-        return orderDetailList;
-    }
-
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
-        this.orderDetailList = orderDetailList;
-    }
 }

@@ -1,25 +1,22 @@
 package com.locha.entity;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-public class Customer {
+public class Customer implements SuperEntity {
     @Id
     private String cid;
     private String name;
     private String address;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Orders> ordersList;
 
     public Customer() {
     }
 
-    public Customer(String cid, String name, String address, List<Orders> ordersList) {
+    public Customer(String cid, String name, String address) {
         this.cid = cid;
         this.name = name;
         this.address = address;
-        this.ordersList = ordersList;
     }
 
     public String getCid() {
@@ -46,11 +43,4 @@ public class Customer {
         this.address = address;
     }
 
-    public List<Orders> getOrdersList() {
-        return ordersList;
-    }
-
-    public void setOrdersList(List<Orders> ordersList) {
-        this.ordersList = ordersList;
-    }
 }

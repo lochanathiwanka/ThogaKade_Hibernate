@@ -5,6 +5,9 @@ import com.locha.dao.DAOFactory;
 import com.locha.dao.custome.impl.ItemDAOImpl;
 import com.locha.dto.ItemDTO;
 import com.locha.entity.Item;
+import com.locha.util.FactoryConfiguration;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +17,62 @@ public class ItemBOImpl implements ItemBO {
     ItemDAOImpl itemDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ITEM);
 
     @Override
-    public boolean addItem(ItemDTO item) throws Exception {
-        Item i = new Item();
-        i.setCode(item.getCode());
-        i.setDescription(item.getDescription());
-        i.setQty(item.getQty());
-        i.setPrice(item.getPrice());
-        return itemDAO.add(i);
+    public void addItem(ItemDTO item) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        itemDAO.setSession(session);
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            itemDAO.add(new Item(item.getCode(), item.getDescription(), item.getQty(), item.getPrice()));
+            transaction.commit();
+        } catch (Throwable t) {
+            session.getTransaction().rollback();
+            throw t;
+        } finally {
+            session.close();
+        }
     }
 
     @Override
     public String getLastId() throws Exception {
-        return itemDAO.getLastId();
+        Session session = FactoryConfiguration.getInstance().getSession();
+        itemDAO.setSession(session);
+        Transaction transaction = null;
+        String id = null;
+
+        try {
+            transaction = session.beginTransaction();
+            id = itemDAO.getLastId();
+            transaction.commit();
+        } catch (Throwable t) {
+            transaction.rollback();
+            throw t;
+        } finally {
+            session.close();
+        }
+
+        return id;
     }
 
     @Override
     public List<ItemDTO> getAll() throws Exception {
-        List<Item> all = itemDAO.getAll();
+        Session session = FactoryConfiguration.getInstance().getSession();
+        itemDAO.setSession(session);
+        Transaction transaction = null;
+        List<Item> all = null;
+
+        try {
+            transaction = session.beginTransaction();
+            all = itemDAO.getAll();
+            transaction.commit();
+        } catch (Throwable t) {
+            transaction.rollback();
+            throw t;
+        } finally {
+            session.close();
+        }
+
         List<ItemDTO> list = new ArrayList<>();
         for (Item item : all) {
             list.add(new ItemDTO(item.getCode(), item.getDescription(), item.getQty(), item.getPrice()));
@@ -39,24 +81,38 @@ public class ItemBOImpl implements ItemBO {
     }
 
     @Override
-    public boolean updateItem(ItemDTO item) throws Exception {
-        Item i = new Item();
-        i.setCode(item.getCode());
-        i.setDescription(item.getDescription());
-        i.setQty(item.getQty());
-        i.setPrice(item.getPrice());
-        itemDAO.update(i);
-        return true;
+    public void updateItem(ItemDTO item) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        itemDAO.setSession(session);
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            itemDAO.update(new Item(item.getCode(), item.getDescription(), item.getQty(), item.getPrice()));
+            transaction.commit();
+        } catch (Throwable t) {
+            transaction.rollback();
+            throw t;
+        } finally {
+            session.close();
+        }
     }
 
     @Override
-    public boolean deleteItem(ItemDTO item) throws Exception {
-        Item i = new Item();
-        i.setCode(item.getCode());
-        i.setDescription(item.getDescription());
-        i.setQty(item.getQty());
-        i.setPrice(item.getPrice());
-        itemDAO.delete(i);
-        return true;
+    public void deleteItem(String id) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        itemDAO.setSession(session);
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            itemDAO.delete(id);
+            transaction.commit();
+        } catch (Throwable t) {
+            transaction.rollback();
+            throw t;
+        } finally {
+            session.close();
+        }
     }
 }

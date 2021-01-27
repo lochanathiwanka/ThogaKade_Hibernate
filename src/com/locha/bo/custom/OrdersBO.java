@@ -12,5 +12,5 @@ import java.util.List;
 public interface OrdersBO extends SuperBO {
     String getLastId() throws Exception;
 
-    boolean placeOrder(CustomerDTO customer, OrdersDTO order, List<OrderDetailDTO> orderDetalList, List<ItemDTO> itemList) throws Exception;
+    void placeOrder(CustomerDTO customer, OrdersDTO order, List<OrderDetailDTO> orderDetalList, List<ItemDTO> itemList) throws Exception;
 }

@@ -3,24 +3,28 @@ package com.locha.entity;
 import javax.persistence.*;
 
 @Entity
-public class OrderDetail {
+public class OrderDetail implements SuperEntity {
     @EmbeddedId
     private CompositeKey compositeKey = new CompositeKey();
 
     @ManyToOne
-    @MapsId("order_Id")
-    @JoinColumn(name = "oid")
+    @JoinColumn(name = "oid", referencedColumnName = "oid", insertable = false, updatable = false)
     private Orders orders;
 
     @ManyToOne
-    @MapsId("item_Code")
-    @JoinColumn(name = "code")
+    @JoinColumn(name = "code", referencedColumnName = "code", insertable = false, updatable = false)
     private Item item;
 
     private int qty;
     private double price;
 
     public OrderDetail() {
+    }
+
+    public OrderDetail(String oid, String code, int qty, double price) {
+        this.compositeKey = new CompositeKey(oid, code);
+        this.qty = qty;
+        this.price = price;
     }
 
     public OrderDetail(CompositeKey compositeKey, Orders orders, Item item, int qty, double price) {

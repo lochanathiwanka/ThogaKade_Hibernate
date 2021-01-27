@@ -10,7 +10,7 @@ public interface CustomerBO extends SuperBO {
 
     List<CustomerDTO> getAll() throws Exception;
 
-    boolean update(CustomerDTO customerDTO) throws Exception;
+    void update(CustomerDTO customerDTO) throws Exception;
 
     CustomerDTO searchCustomer(String value) throws Exception;
 }

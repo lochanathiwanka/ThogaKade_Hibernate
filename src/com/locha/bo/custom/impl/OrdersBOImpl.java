@@ -2,24 +2,28 @@ package com.locha.bo.custom.impl;
 
 import com.locha.bo.custom.OrdersBO;
 import com.locha.dao.DAOFactory;
-import com.locha.dao.custome.impl.CustomerDAOImpl;
-import com.locha.dao.custome.impl.ItemDAOImpl;
-import com.locha.dao.custome.impl.OrderDetailDAOImpl;
-import com.locha.dao.custome.impl.OrdersDAOImpl;
+import com.locha.dao.custome.CustomerDAO;
+import com.locha.dao.custome.ItemDAO;
+import com.locha.dao.custome.OrderDetailDAO;
+import com.locha.dao.custome.OrdersDAO;
 import com.locha.dto.CustomerDTO;
 import com.locha.dto.ItemDTO;
 import com.locha.dto.OrderDetailDTO;
 import com.locha.dto.OrdersDTO;
-import com.locha.entity.*;
+import com.locha.entity.Customer;
+import com.locha.entity.Item;
+import com.locha.entity.OrderDetail;
+import com.locha.entity.Orders;
+import com.locha.util.FactoryConfiguration;
+import org.hibernate.Session;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersBOImpl implements OrdersBO {
-    CustomerDAOImpl customerDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.CUSTOMER);
-    OrdersDAOImpl ordersDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ORDERS);
-    OrderDetailDAOImpl orderDetailDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ORDERDETAIL);
-    ItemDAOImpl itemDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ITEM);
+    CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.CUSTOMER);
+    OrdersDAO ordersDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ORDERS);
+    OrderDetailDAO orderDetailDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ORDERDETAIL);
+    ItemDAO itemDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ITEM);
 
     @Override
     public String getLastId() throws Exception {
@@ -27,42 +31,31 @@ public class OrdersBOImpl implements OrdersBO {
     }
 
     @Override
-    public boolean placeOrder(CustomerDTO c, OrdersDTO o, List<OrderDetailDTO> odList, List<ItemDTO> iList) throws Exception {
-        Customer customer = new Customer();
-        customer.setCid(c.getCid());
-        customer.setName(c.getName());
-        customer.setAddress(c.getAddress());
+    public void placeOrder(CustomerDTO c, OrdersDTO o, List<OrderDetailDTO> odList, List<ItemDTO> iList) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        customerDAO.setSession(session);
+        ordersDAO.setSession(session);
+        orderDetailDAO.setSession(session);
+        itemDAO.setSession(session);
 
-        Orders order = new Orders();
-        order.setOid(o.getOid());
-        order.setDate(o.getDate());
+        try {
+            session.getTransaction().begin();
+            Customer customer = new Customer(c.getCid(), c.getName(), c.getAddress());
+            customerDAO.add(customer);
 
-        order.setCustomer(customer);
+            ordersDAO.add(new Orders(o.getOid(), o.getDate(), customer));
 
-        List<OrderDetail> orderDetailList = new ArrayList<>();
-        OrderDetail orderDetail = new OrderDetail();
-
-        order.setOrderDetailList(orderDetailList);
-        customerDAO.add(customer);
-        ordersDAO.add(order);
-
-        Item item = new Item();
-        for (int i = 0; i < odList.size(); i++) {
-            CompositeKey pk = new CompositeKey();
-            pk.setOid(odList.get(i).getOid());
-            pk.setCode(odList.get(i).getCode());
-
-            item = new Item(iList.get(i).getCode(), iList.get(i).getDescription(), iList.get(i).getQty(), iList.get(i).getPrice(), orderDetailList);
-
-            orderDetail.setCompositeKey(pk);
-            orderDetail.setOrders(order);
-            orderDetail.setItem(item);
-            orderDetail.setQty(odList.get(i).getQty());
-            orderDetail.setPrice(odList.get(i).getPrice());
-
-            orderDetailDAO.add(orderDetail);
-            itemDAO.update(item);
+            for (OrderDetailDTO od : odList) {
+                orderDetailDAO.add(new OrderDetail(od.getOid(), od.getCode(), od.getQty(), od.getPrice()));
+                Item item = itemDAO.search(od.getCode());
+                item.setQty(item.getQty() - od.getQty());
+            }
+            session.getTransaction().commit();
+        } catch (Throwable t) {
+            session.getTransaction().rollback();
+            throw t;
+        } finally {
+            session.close();
         }
-        return true;
     }
 }

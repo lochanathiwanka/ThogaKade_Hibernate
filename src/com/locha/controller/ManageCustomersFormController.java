@@ -3,7 +3,7 @@ package com.locha.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.locha.bo.BOFactory;
-import com.locha.bo.custom.impl.CustomerBOImpl;
+import com.locha.bo.custom.CustomerBO;
 import com.locha.dto.CustomerDTO;
 import com.locha.stages.StageList;
 import javafx.collections.FXCollections;
@@ -34,7 +34,7 @@ public class ManageCustomersFormController extends StageList {
     public JFXTextField txtAddress;
     public TextField txtSearch;
 
-    CustomerBOImpl customerBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.CUSTOMER);
+    CustomerBO customerBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize() {
         getAllCustomers();
@@ -62,18 +62,16 @@ public class ManageCustomersFormController extends StageList {
     public void btnUpdateOnAction(ActionEvent actionEvent) {
         try {
             String cid = tblCustomers.getSelectionModel().getSelectedItem().getCid();
-            boolean isUpdated = customerBO.update(new CustomerDTO(cid, txtName.getText(), txtAddress.getText()));
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Customer updated!", ButtonType.OK).show();
-                getAllCustomers();
-                txtName.clear();
-                txtAddress.clear();
-                btnUpdate.setDisable(true);
-            } else {
-                new Alert(Alert.AlertType.ERROR, "error", ButtonType.OK).show();
-            }
+            customerBO.update(new CustomerDTO(cid, txtName.getText(), txtAddress.getText()));
+
+            new Alert(Alert.AlertType.CONFIRMATION, "Customer updated!", ButtonType.OK).show();
+            getAllCustomers();
+            txtName.clear();
+            txtAddress.clear();
+            btnUpdate.setDisable(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "error", ButtonType.OK).show();
+//            e.printStackTrace();
         }
     }
 
@@ -84,8 +82,8 @@ public class ManageCustomersFormController extends StageList {
             list.add(customer);
             tblCustomers.setItems(list);
             setTblCustomerCellValue();
-        }  catch (Exception e) {
-            
+        } catch (Exception e) {
+
         }
     }
 

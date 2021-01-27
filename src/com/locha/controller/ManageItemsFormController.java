@@ -3,6 +3,7 @@ package com.locha.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.locha.bo.BOFactory;
+import com.locha.bo.custom.ItemBO;
 import com.locha.bo.custom.impl.ItemBOImpl;
 import com.locha.dto.ItemDTO;
 import com.locha.stages.StageList;
@@ -42,7 +43,7 @@ public class ManageItemsFormController extends StageList {
     public JFXTextField txtQTY;
     public JFXTextField txtPrice;
 
-    ItemBOImpl itemBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ITEM);
+    ItemBO itemBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ITEM);
 
     public void initialize() {
         generateItemCode();
@@ -88,64 +89,55 @@ public class ManageItemsFormController extends StageList {
 
     public void btnAddOnAction(ActionEvent actionEvent) {
         try {
-            boolean isAdded = itemBO.addItem(new ItemDTO
+            itemBO.addItem(new ItemDTO
                     (txtCode.getText(), txtDescription.getText(), Integer.parseInt(txtQTY.getText()), Double.parseDouble(txtPrice.getText())));
-            if (isAdded) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Item added!", ButtonType.OK).show();
-                generateItemCode();
-                getAllItems();
-                txtDescription.clear();
-                txtQTY.clear();
-                txtPrice.clear();
-            }else {
-                new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
-            }
+
+            new Alert(Alert.AlertType.CONFIRMATION, "Item added!", ButtonType.OK).show();
+            generateItemCode();
+            getAllItems();
+            txtDescription.clear();
+            txtQTY.clear();
+            txtPrice.clear();
         } catch (Exception e) {
 //            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
         }
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
         try {
-            boolean isUpdated = itemBO.updateItem(new ItemDTO(
+            itemBO.updateItem(new ItemDTO(
                     txtCode.getText(), txtDescription.getText(), Integer.parseInt(txtQTY.getText()), Double.parseDouble(txtPrice.getText())));
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Item updated!", ButtonType.OK).show();
-                generateItemCode();
-                getAllItems();
-                txtDescription.clear();
-                txtQTY.clear();
-                txtPrice.clear();
-                btnUpdate.setDisable(true);
-                btnDelete.setDisable(true);
-            }
-            else {
-                new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
-            }
+
+            new Alert(Alert.AlertType.CONFIRMATION, "Item updated!", ButtonType.OK).show();
+            generateItemCode();
+            getAllItems();
+            txtDescription.clear();
+            txtQTY.clear();
+            txtPrice.clear();
+            btnUpdate.setDisable(true);
+            btnDelete.setDisable(true);
         }catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
         }
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
         try {
-            boolean isDeleted = itemBO.deleteItem(new ItemDTO(
-                    txtCode.getText(), txtDescription.getText(), Integer.parseInt(txtQTY.getText()), Double.parseDouble(txtPrice.getText())));
-            if (isDeleted) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Item deleted!", ButtonType.OK).show();
-                generateItemCode();
-                getAllItems();
-                txtDescription.clear();
-                txtQTY.clear();
-                txtPrice.clear();
-                btnUpdate.setDisable(true);
-                btnDelete.setDisable(true);
-            }
-            else {
-                new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
-            }
+            itemBO.deleteItem(txtCode.getText());
+
+            new Alert(Alert.AlertType.CONFIRMATION, "Item deleted!", ButtonType.OK).show();
+            generateItemCode();
+            getAllItems();
+            txtDescription.clear();
+            txtQTY.clear();
+            txtPrice.clear();
+            btnUpdate.setDisable(true);
+            btnDelete.setDisable(true);
         }catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "error!", ButtonType.OK).show();
         }
     }
 

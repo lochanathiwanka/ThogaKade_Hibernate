@@ -9,6 +9,14 @@ public class CompositeKey implements Serializable {
     private String oid;
     private String code;
 
+    public CompositeKey() {
+    }
+
+    public CompositeKey(String oid, String code) {
+        this.oid = oid;
+        this.code = code;
+    }
+
     public String getOid() {
         return oid;
     }

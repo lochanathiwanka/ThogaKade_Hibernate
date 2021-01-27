@@ -3,11 +3,10 @@ package com.locha.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.locha.bo.BOFactory;
-import com.locha.bo.custom.impl.CustomerBOImpl;
-import com.locha.bo.custom.impl.ItemBOImpl;
-import com.locha.bo.custom.impl.OrderDetailBOImpl;
-import com.locha.bo.custom.impl.OrdersBOImpl;
-import com.locha.dao.custome.impl.CustomerDAOImpl;
+import com.locha.bo.custom.CustomerBO;
+import com.locha.bo.custom.ItemBO;
+import com.locha.bo.custom.OrderDetailBO;
+import com.locha.bo.custom.OrdersBO;
 import com.locha.dto.*;
 import com.locha.stages.StageList;
 import javafx.collections.FXCollections;
@@ -20,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ManageOrdersFormController extends StageList {
@@ -31,42 +29,31 @@ public class ManageOrdersFormController extends StageList {
     public JFXButton btnRemove;
     public JFXButton btnAddtoCart;
     public JFXButton btnPlaceOrder;
+    public TextField txtTotalPrice;
+    ItemBO itemBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ITEM);
+    CustomerBO customerBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.CUSTOMER);
+    OrdersBO ordersBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ORDERS);
+    OrderDetailBO orderDetailBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ORDERDETAIL);
     @FXML
     private TableView<ItemDTO> tblItems;
-
     @FXML
     private TableColumn<ItemDTO, String> clmItemCode;
-
     @FXML
     private TableColumn<ItemDTO, String> clmDescription;
-
     @FXML
     private TableColumn<ItemDTO, String> clmItemQTY;
-
     @FXML
     private TableColumn<ItemDTO, String> clmPrice;
-
     @FXML
     private TableView<CustomeDTO> tblOrders;
-
     @FXML
     private TableColumn<CustomeDTO, String> clmCode;
-
     @FXML
     private TableColumn<CustomeDTO, String> clmQTY;
-
     @FXML
     private TableColumn<CustomeDTO, String> clmTotalPrice;
-
-    public TextField txtTotalPrice;
-
     private int tblOrdersSelectedRow;
-    private List<ItemDTO> itemList = new ArrayList<>();
-
-    ItemBOImpl itemBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ITEM);
-    CustomerBOImpl customerBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.CUSTOMER);
-    OrdersBOImpl ordersBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ORDERS);
-    OrderDetailBOImpl orderDetailBO = BOFactory.getInstance().getBO(BOFactory.BOTypes.ORDERDETAIL);
+    private final List<ItemDTO> itemList = new ArrayList<>();
 
     public void initialize() {
         getAllItem();
@@ -93,13 +80,13 @@ public class ManageOrdersFormController extends StageList {
     private void generateCustomerId() {
         try {
             String lastId = customerBO.getLastId();
-            int newId = Integer.parseInt(lastId.substring(1, 4))+1;
+            int newId = Integer.parseInt(lastId.substring(1, 4)) + 1;
             if (newId < 10) {
-                txtCID.setText("C00"+newId);
-            }else if (newId < 100) {
-                txtCID.setText("C0"+newId);
-            }else {
-                txtCID.setText("C"+newId);
+                txtCID.setText("C00" + newId);
+            } else if (newId < 100) {
+                txtCID.setText("C0" + newId);
+            } else {
+                txtCID.setText("C" + newId);
             }
         } catch (Exception e) {
             txtCID.setText("C001");
@@ -110,13 +97,13 @@ public class ManageOrdersFormController extends StageList {
         String generatedId;
         try {
             String lastId = ordersBO.getLastId();
-            int newId = Integer.parseInt(lastId.substring(1, 4))+1;
+            int newId = Integer.parseInt(lastId.substring(1, 4)) + 1;
             if (newId < 10) {
-                generatedId = "D00"+newId;
-            }else if (newId < 100) {
-                generatedId = "D0"+newId;
-            }else {
-                generatedId = "D"+newId;
+                generatedId = "D00" + newId;
+            } else if (newId < 100) {
+                generatedId = "D0" + newId;
+            } else {
+                generatedId = "D" + newId;
             }
         } catch (Exception e) {
             generatedId = "D001";
@@ -163,7 +150,7 @@ public class ManageOrdersFormController extends StageList {
             itemList.add(item);
 
 //            Calculate Total
-            txtTotalPrice.setText(calculateTotal()+"");
+            txtTotalPrice.setText(calculateTotal() + "");
         }
         txtQTY.clear();
         btnPlaceOrder.setDisable(false);
@@ -191,30 +178,27 @@ public class ManageOrdersFormController extends StageList {
         }
 
         try {
-            boolean isPlaced = ordersBO.placeOrder(customer, order, orderDetalList, itemList);
-            if (isPlaced) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Order placed!", ButtonType.OK).show();
-                generateOrderId();
-                generateCustomerId();
-                tblOrders.getItems().clear();
-                getAllItem();
-                itemList.clear();
-                txtName.clear();
-                txtAddress.clear();
-                txtTotalPrice.clear();
-                btnPlaceOrder.setDisable(true);
-            } else {
-                new Alert(Alert.AlertType.CONFIRMATION, "error", ButtonType.OK).show();
-            }
+            ordersBO.placeOrder(customer, order, orderDetalList, itemList);
+            new Alert(Alert.AlertType.CONFIRMATION, "Order placed!", ButtonType.OK).show();
+            generateOrderId();
+            generateCustomerId();
+            tblOrders.getItems().clear();
+            getAllItem();
+            itemList.clear();
+            txtName.clear();
+            txtAddress.clear();
+            txtTotalPrice.clear();
+            btnPlaceOrder.setDisable(true);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            new Alert(Alert.AlertType.CONFIRMATION, "error", ButtonType.OK).show();
         }
     }
 
     public void btnRemoveItemOnAction(ActionEvent actionEvent) {
         try {
             tblOrders.getItems().remove(tblOrdersSelectedRow);
-            txtTotalPrice.setText(calculateTotal()+"");
+            txtTotalPrice.setText(calculateTotal() + "");
             btnRemove.setDisable(true);
             if (tblOrders.getItems().size() == 0) {
                 btnPlaceOrder.setDisable(true);
@@ -232,7 +216,7 @@ public class ManageOrdersFormController extends StageList {
     public void tblItemsOnMouseClicked(MouseEvent mouseEvent) {
         try {
             btnAddtoCart.setDisable(false);
-            txtQTY.setText(tblItems.getSelectionModel().getSelectedItem().getQty()+"");
+            txtQTY.setText(tblItems.getSelectionModel().getSelectedItem().getQty() + "");
         } catch (NullPointerException ex) {
             btnAddtoCart.setDisable(true);
         }

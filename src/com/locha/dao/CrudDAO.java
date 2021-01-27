@@ -1,11 +1,13 @@
 package com.locha.dao;
+import com.locha.entity.SuperEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
-public interface CrudDAO <Entity, ID extends Serializable> extends SuperDAO {
-    boolean add (Entity entity) throws Exception;
-    boolean delete (Entity entity) throws Exception;
-    boolean update (Entity entity) throws Exception;
+public interface CrudDAO <Entity extends SuperEntity, ID extends Serializable> extends SuperDAO {
+    void add (Entity entity) throws Exception;
+    void delete (ID id) throws Exception;
+    void update (Entity entity) throws Exception;
     Entity search (ID id) throws Exception;
     List<Entity> getAll () throws Exception;
 }

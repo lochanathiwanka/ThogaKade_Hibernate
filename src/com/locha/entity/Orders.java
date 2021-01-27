@@ -3,18 +3,25 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Orders {
+public class Orders implements SuperEntity {
     @Id
     private String oid;
     private String date;
+
     @ManyToOne
-    @JoinColumn(name = "cid")
+    @JoinColumn(name = "cid", referencedColumnName = "cid")
     private Customer customer;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetailList;
 
     public Orders() {
+    }
+
+    public Orders(String oid, String date, Customer customer) {
+        this.oid = oid;
+        this.date = date;
+        this.customer = customer;
     }
 
     public Orders(String oid, String date, Customer customer, List<OrderDetail> orderDetailList) {
